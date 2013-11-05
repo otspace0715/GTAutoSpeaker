@@ -1,0 +1,17 @@
+{
+   "lang_interval": {
+      "message": "Interval"
+   },
+   "lang_playback": {
+      "message": "Playback Settings"
+   },
+   "lang_playbackONOFF": {
+      "message": "Playback ON/OFF"
+   },
+   "lang_keyboard": {
+      "message": "Keyboard shortcut"
+   },
+   "title": {
+      "message": "Translate to speech"
+   }
+}

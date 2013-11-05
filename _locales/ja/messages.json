@@ -1,0 +1,17 @@
+{
+   "lang_playback": {
+      "message": "再生設定"
+   },
+   "lang_interval": {
+      "message": "再生間隔"
+   },
+   "lang_playbackONOFF": {
+      "message": "再生のON/OFF"
+   },
+   "lang_keyboard": {
+      "message": "キーボード ショートカット"
+   },
+   "title": {
+      "message": "翻訳を発言"
+   }
+}

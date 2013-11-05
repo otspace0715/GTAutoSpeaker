@@ -1,0 +1,31 @@
+{
+  "manifest_version": 2,
+  "default_locale": "ja",
+  "background": {
+      "persistent": true,
+      "page": "GTAS.html"
+   },
+   "permissions": ["ttsEngine", "tabs"],
+  "icons": {
+      "128": "images/icon.png",
+      "16": "images/icon.png"
+   },
+   "browser_action" : {
+       "default_icon": "images/icon.png",
+       "default_title": "GTAS"
+   },
+  "content_scripts": [ {
+    "matches": [ "http://*/*", "https://*/*" ],
+    "exclude_globs": [  ],
+    "exclude_matches": [  ],
+    "include_globs": [ "http://translate.google.*/*", "https://translate.google.*/*" ],
+    "js": [ "jquery-1.7.1.js", "content.js" ],
+    "run_at": "document_end",
+    "all_frames" : false
+  } ],
+  "options_page": "options.html",
+  "converted_from_user_script": true,
+  "description": " Automatic Text-to-speech of Google Translate Site.",
+  "name": "GT Auto Speaker",
+  "version": "1.0.0"
+}
