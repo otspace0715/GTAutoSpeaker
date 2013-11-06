@@ -12,7 +12,7 @@
    },
    "browser_action" : {
        "default_icon": "images/icon.png",
-       "default_title": "GTAS"
+       "default_title": "GT Auto Speaker"
    },
   "content_scripts": [ {
     "matches": [ "http://*/*", "https://*/*" ],
@@ -25,7 +25,7 @@
   } ],
   "options_page": "options.html",
   "converted_from_user_script": true,
-  "description": " Automatic Text-to-speech of Google Translate Site.",
+  "description": "Automatic Text-to-speech of Google Translate Site.",
   "name": "GT Auto Speaker",
   "version": "1.0.0"
 }

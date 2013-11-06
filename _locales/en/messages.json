@@ -8,6 +8,12 @@
    "lang_playbackONOFF": {
       "message": "Playback ON/OFF"
    },
+   "lang_audioinput": {
+      "message": "Audio Input Settings"
+   },
+   "lang_audioinputONOFF": {
+      "message": "Audio Input ON/OFF"
+   },
    "lang_keyboard": {
       "message": "Keyboard shortcut"
    },

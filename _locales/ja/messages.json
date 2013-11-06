@@ -8,6 +8,12 @@
    "lang_playbackONOFF": {
       "message": "再生のON/OFF"
    },
+   "lang_audioinput": {
+      "message": "音声入力設定"
+   },
+   "lang_audioinputONOFF": {
+      "message": "音声入力のON/OFF"
+   },
    "lang_keyboard": {
       "message": "キーボード ショートカット"
    },

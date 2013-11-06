@@ -3,35 +3,36 @@
  *
  * This file contains user options funcrions
  *
- * @package		GTAS
- * @category	Options
- * @author		o.tanaka
+ * @package     GTAS
+ * @category    Options
+ * @author      o.tanaka
  */
-	var element = {},
-		bg = chrome.extension.getBackgroundPage(),
-		vars = [
-					'percents', 'interval', 'playback', 'playback_hotkeys', 'playback_hotkey', 'options_title'
-				];
+    var element = {},
+        bg = chrome.extension.getBackgroundPage(),
+        vars = [
+                    'percents', 'interval', 'playback', 'playback_hotkeys', 'playback_hotkey',
+                    'audioinput', 'audioinput_hotkeys', 'audioinput_hotkey', 'options_title'
+                ];
 /*
  * ---------------------------------------------------------------------------------------------------------------------
  * Create local variables and get their values
  * ---------------------------------------------------------------------------------------------------------------------
 */
-	function set_vars(vars)
-	{
-		for (key in vars)
-  		{
-  			key = vars[key];
- 			if(document.getElementById(key) != null)
- 			{
- 				element[key] = document.getElementById(key);
- 			}
- 			else
- 			{
- 				element[key] = '';
- 			}
-  		}
-	}	
+    function set_vars(vars)
+    {
+        for (key in vars)
+          {
+              key = vars[key];
+             if(document.getElementById(key) != null)
+             {
+                 element[key] = document.getElementById(key);
+             }
+             else
+             {
+                 element[key] = '';
+             }
+          }
+    }    
 /*
  * ---------------------------------------------------------------------------------------------------------------------
  * Initialise Event listeners
@@ -40,21 +41,36 @@
 function init_listeners()
 {
 
-	element.playback.addEventListener('change', function() {
-		save_options();
-	}, false);
+    element.playback.addEventListener('change', function() {
+        save_options();
+    }, false);
 
-	element.interval.addEventListener('change', function() {
-		element.percents.innerHTML = parseInt(this.value)+' %';
-		save_options();
-	}, false);
-	
-	element.playback_hotkeys.addEventListener("keydown", function(e){
-		keyDown(e,0);
-		save_options();
-	}, false);
+//    element.audioinput.addEventListener('change', function() {
+//        save_options();
+//    }, false);
 
-		
+    element.interval.addEventListener('change', function() {
+        element.percents.innerHTML = parseInt(this.value)+' %';
+        save_options();
+    }, false);
+    
+    element.playback_hotkeys.addEventListener("keydown", function(e){
+    	element.playback_hotkey = keyDown(e);
+    	if (element.playback_hotkey != element.audioinput_hotkey) {
+            save_options();
+    	} else {
+    		e.target.value = "";
+    	}
+    }, false);
+
+//    element.audioinput_hotkeys.addEventListener("keydown", function(e){
+//    	element.audioinput_hotkey = keyDown(e);
+//    	if (element.playback_hotkey != element.audioinput_hotkey) {
+//    		save_options();
+//    	} else {
+//    		e.target.value = "";
+//    	}
+//    }, false);
 
 }
 /*
@@ -64,12 +80,12 @@ function init_listeners()
 */
 function checkLocalStorage()
 {
-	if (window.localStorage == null) 
-	{
-		alert("LocalStorage must be enabled for changing options.");
-		return false;
-	}
-	return true;
+    if (window.localStorage == null) 
+    {
+        alert("LocalStorage must be enabled for changing options.");
+        return false;
+    }
+    return true;
 }
 
 /*
@@ -90,17 +106,17 @@ function getVersion()
 */
 function getLanguages(current)
 {
-	for(langs in languages)
-	{
-		var opt = document.createElement('option');	
-		if (languages[langs].language == current)
-		{
-			opt.setAttribute('selected', 'selected');
-		}
-		opt.setAttribute('value', languages[langs].language);
-		opt.innerText = languages[langs].name;
-		language.appendChild(opt);
-	}	
+    for(langs in languages)
+    {
+        var opt = document.createElement('option');    
+        if (languages[langs].language == current)
+        {
+            opt.setAttribute('selected', 'selected');
+        }
+        opt.setAttribute('value', languages[langs].language);
+        opt.innerText = languages[langs].name;
+        language.appendChild(opt);
+    }    
 }
 /*
  * ---------------------------------------------------------------------------------------------------------------------
@@ -109,21 +125,23 @@ function getLanguages(current)
 */
 function save_options()
 {
-	
-	if(!checkLocalStorage()) return;
+    
+    if(!checkLocalStorage()) return;
 
-	localStorage.clear();
-	
-  	var options =
-	{
-		version : getVersion(),
-		interval : element.interval.value,
-		playback : element.playback.checked,
-		playback_hotkeys: element.playback_hotkey
-	}
+    localStorage.clear();
+    
+      var options =
+    {
+        version : getVersion(),
+        interval : element.interval.value,
+        playback : element.playback.checked,
+        playback_hotkeys: element.playback_hotkey,
+        audioinput : element.audioinput.checked,
+        audioinput_hotkeys: element.audioinput_hotkey
+    }
 
-	localStorage.setItem("options", JSON.stringify(options));
-  	bg.setOptions(options);
+    localStorage.setItem("options", JSON.stringify(options));
+    bg.setOptions(options);
 }
 
 /*
@@ -133,13 +151,16 @@ function save_options()
 */
 function restore_options()
 {
-	options = JSON.parse(localStorage.getItem("options"));
-	element.options_title.innerHTML = 'GT Auto Speaker v'+getVersion();
-	element.interval.value = options.interval;
-	element.percents.innerHTML = parseInt(options.interval)+' %';
-	element.playback.checked = options.playback;
-	element.playback_hotkeys.value = getHotkeys(options.playback_hotkeys);
-	element.playback_hotkey = options.playback_hotkeys;
+    options = JSON.parse(localStorage.getItem("options"));
+    element.options_title.innerHTML = 'GT Auto Speaker v'+getVersion();
+    element.interval.value = options.interval;
+    element.percents.innerHTML = parseInt(options.interval)+' %';
+    element.playback.checked = options.playback;
+    element.playback_hotkeys.value = getHotkeys(options.playback_hotkeys);
+    element.playback_hotkey = options.playback_hotkeys;
+    element.audioinput.checked = options.audioinput;
+    element.audioinput_hotkeys.value = getHotkeys(options.audioinput_hotkeys);
+    element.audioinput_hotkey = options.audioinput_hotkeys;
 }
 /*
  * ---------------------------------------------------------------------------------------------------------------------
@@ -149,10 +170,10 @@ function restore_options()
 function getHotkeys(keys)
 {
 
-	if (keys == undefined) {
-		return null;
-	}
-	return keys.substr(0,keys.lastIndexOf('+')+2)+CharCode(keys.substr(keys.lastIndexOf('+')+2,2));	
+    if (keys == undefined) {
+        return null;
+    }
+    return keys.substr(0,keys.lastIndexOf('+')+2)+CharCode(keys.substr(keys.lastIndexOf('+')+2,2));    
 }
 
 /*
@@ -162,33 +183,27 @@ function getHotkeys(keys)
 */
 function CharCode(code)
 {
-	return String.fromCharCode(code).toLowerCase();		
+    return String.fromCharCode(code).toLowerCase();        
 }
 /*
  * ---------------------------------------------------------------------------------------------------------------------
  * Save user defined options
  * ---------------------------------------------------------------------------------------------------------------------
 */
-function keyDown(e,kb)
+function keyDown(e)
 {
-	out = "";
-	if(e.ctrlKey) out += "ctrl + ";
-	if(e.shiftKey) out += "shift + ";
-	if(e.altKey) out += "alt + ";
-	if(e.metaKey) out += "meta + ";
-	code = e.keyCode;
-	code = code == 16 ||code == 17 ||code == 18?null:code;
-	e.target.value = out + CharCode(code);
-	if(kb == 0)
-	{
-		element.playback_hotkey = out + code;		
-	}
-	else
-	{
-		sec_hotkey = out + code;		
-	}
-	e.preventDefault();
-	return false;
+	var data = "";
+    out = "";
+    if(e.ctrlKey) out += "ctrl + ";
+    if(e.shiftKey) out += "shift + ";
+    if(e.altKey) out += "alt + ";
+    if(e.metaKey) out += "meta + ";
+    code = e.keyCode;
+    code = code == 16 ||code == 17 ||code == 18?null:code;
+    e.target.value = out + CharCode(code);
+    data = out + code;
+    e.preventDefault();
+    return data;
 }
 
 /*
@@ -198,17 +213,17 @@ function keyDown(e,kb)
 */
 function setLocales()
 {
-	locales = document.getElementsByClassName('locale');
-	locales = Array.prototype.slice.call(locales);
-	
-	for(i=0;locales.length;i++)
-	{
-		if(locales[i] === undefined) break; //Fix 4 Uncaught error
-		if(chrome.i18n.getMessage(locales[i].id) != '')
-		{
-				locales[i].innerHTML = chrome.i18n.getMessage(locales[i].id);				
-		}
-	}
+    locales = document.getElementsByClassName('locale');
+    locales = Array.prototype.slice.call(locales);
+    
+    for(i=0;locales.length;i++)
+    {
+        if(locales[i] === undefined) break; //Fix 4 Uncaught error
+        if(chrome.i18n.getMessage(locales[i].id) != '')
+        {
+                locales[i].innerHTML = chrome.i18n.getMessage(locales[i].id);                
+        }
+    }
 }
 
 /*
@@ -218,8 +233,8 @@ function setLocales()
 */
 (function()
 {
-	set_vars(vars);
-	init_listeners();
-	restore_options();
-	setLocales();
+    set_vars(vars);
+    init_listeners();
+    restore_options();
+    setLocales();
 })();
